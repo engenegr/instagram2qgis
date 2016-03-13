@@ -1,0 +1,44 @@
+# This file contains metadata for your plugin. Beginning
+# with version 1.8 this is the preferred way to supply information about a
+# plugin. The current method of embedding metadata in __init__.py will
+# be supported until version 2.0
+
+# This file should be included when you package your plugin.
+
+# Mandatory items:
+
+
+[general]
+name=Instragram2qgis
+qgisMinimumVersion=2.2
+description=Instragram2qgis
+about=Search and downloading Instagram images and create a point shapefile with them.
+You need install some additional Python libraries: instagram,httplib2,requests,simplejson,six 
+version=0.0
+author=Francisco Raga Lopez
+email=franka1986@gmail.com
+
+# end of mandatory metadata
+
+# Optional items:
+
+# Uncomment the following line and add your changelog entries:
+changelog=    
+	** General **
+	0.0:
+		-Start of plugin 
+ 
+# tags are comma separated with spaces allowed
+tags=instagram,photos,actions,menu,tool,style,custom,configuration
+
+homepage=http://hub.qgis.org/projects/instagram2gis
+tracker=http://hub.qgis.org/projects/instagram2gis/issues
+repository=https://github.com/All4Gis/instagram2qgis
+icon=images/icon.png
+
+# experimental flag
+experimental=True
+
+# deprecated flag (applies to the whole plugin, not just a single version
+deprecated=False
+
