@@ -10,7 +10,7 @@ The images can be downloaded by the following parameters:
 
 ####This first version only allows to download by tag.####
 	
-[Example](https://github.com/All4Gis/instagram2qgis/example)
+[Example](https://github.com/All4Gis/instagram2qgis/tree/master/example)
 
 ## Prerequisites
 
@@ -21,12 +21,12 @@ The following libraries must be installed:
 - simplejson
 - six 
 
-You can download them here,[additional libraries](https://github.com/All4Gis/instagram2qgis/lib)
+You can download them here,[additional libraries](https://github.com/All4Gis/instagram2qgis/tree/master/lib)
 
 You also need an "ACCESS TOKEN" and an "ACCESS CLIENT". To obtain them, you must create an application with your instagram account.
 [Instragram app](https://www.instagram.com/developer/register/),
 
-Once created, a “CLIENT ID” and a “CLIENT SECRET” will be provided and you can create the “ACCESS TOKEN" by accessing the following link [enlace](http://instagram.pixelunion.net/)
+Once created, a “CLIENT ID” and a “CLIENT SECRET” will be provided and you can create the “ACCESS TOKEN" by accessing the following [link](http://instagram.pixelunion.net/)
 
 
  
