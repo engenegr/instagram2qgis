@@ -5,11 +5,11 @@ This plugin allows to import data from instagram and visualize it in Qgis.
 In order to do so, a points-type shapefile is created with the geolocalized images downloaded from instagram according to the parameters introduced by the user.
 
 The images can be downloaded by the following parameters:
-- Tag
-- For coordinates,...
+	- Search photos by hashtags
+	- Search Instagram users
+	- Search photos by location on map
+	- Search popular photos	
 
-####This first version only allows to download by tag.####
-	
 [Example](https://github.com/All4Gis/instagram2qgis/tree/master/example)
 
 ## Prerequisites
