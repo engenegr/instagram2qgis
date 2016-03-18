@@ -1,7 +1,8 @@
-# This file contains metadata for your plugin. Beginning
-# with version 1.8 this is the preferred way to supply information about a
-# plugin. The current method of embedding metadata in __init__.py will
-# be supported until version 2.0
+# This file contains metadata for your plugin. Since 
+# version 2.0 of QGIS this is the proper way to supply 
+# information about a plugin. The old method of 
+# embedding metadata in __init__.py will 
+# is no longer supported since version 2.0.
 
 # This file should be included when you package your plugin.
 
@@ -9,12 +10,11 @@
 
 
 [general]
-name=Instragram2qgis
-qgisMinimumVersion=2.2
-description=Instragram2qgis
-about=Search and downloading Instagram images and create a point shapefile with them.
-You need install some additional Python libraries: instagram,httplib2,requests,simplejson,six 
-version=0.0
+name=Instagram2qgis
+qgisMinimumVersion=2.0
+description=Instagram2qgis
+about=Search and downloading Instagram images and create a point shapefile with them.You need install some additional Python libraries:instagram,httplib2,requests,simplejson,six 
+version=0.1
 author=Francisco Raga Lopez
 email=franka1986@gmail.com
 
@@ -25,11 +25,21 @@ email=franka1986@gmail.com
 # Uncomment the following line and add your changelog entries:
 changelog=    
 	** General **
+	0.1:
+		- Add search photos by hashtags
+		- Add search Instagram users
+		- Add search photos by location on map	
+		- Add search popular photos	
+		- Check Prerequisites in the user PC.
+		- Add photos in canvas(svg icons).
+		- Save shape,icons and style(shp,svg,qml) in a folder,if you want. 
+		- ticket #14480
+		- Minor changes
 	0.0:
-		-Start of plugin 
+		-Start of plugin.
  
 # tags are comma separated with spaces allowed
-tags=instagram,photos,actions,menu,tool,style,custom,configuration
+tags=instagram,photos,web, search,actions,tool
 
 homepage=http://hub.qgis.org/projects/instagram2gis
 tracker=http://hub.qgis.org/projects/instagram2gis/issues

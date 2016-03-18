@@ -19,8 +19,8 @@
  *                                                                         *
  ***************************************************************************/
 """
-import os.path
-
+import os.path,shutil
+ 
 from About import AboutDialog
 from Insta2QgisDialog import Insta2QgisDialog
 from PyQt4.QtCore import *
@@ -28,13 +28,7 @@ from PyQt4.QtGui import *
 import gui.generated.resources_rc
 from qgis.core import *
  
-try:
-    import sys
-    from pydevd import *
-except:
-    None
-    
-
+ 
 class Insta2QgisTool:
 
     """QGIS Plugin Implementation."""
@@ -46,7 +40,7 @@ class Insta2QgisTool:
         self.iface = iface
         self.plugin_dir = os.path.dirname(__file__)
         locale = QSettings().value("locale//userLocale")[0:2]
-        localePath = os.path.join(self.plugin_dir, 'i18n', 'Instragram2qgis_{}.qm'.format(locale))
+        localePath = os.path.join(self.plugin_dir, 'i18n', 'Instagram2qgis_{}.qm'.format(locale))
         if os.path.exists(localePath):
             self.translator = QTranslator()
             self.translator.load(localePath)
@@ -55,19 +49,19 @@ class Insta2QgisTool:
                 QCoreApplication.installTranslator(self.translator)
  
     def initGui(self):
-        self.action = QAction(QIcon(":/imgInstragram/images/icon.png"), u"Instragram2qgis", self.iface.mainWindow())
+        self.action = QAction(QIcon(":/imgInstagram/images/icon.png"), u"Instagram2qgis", self.iface.mainWindow())
         self.action.triggered.connect(self.run)
         self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu(u"&Instragram2qgis", self.action)
+        self.iface.addPluginToMenu(u"&Instagram2qgis", self.action)
        
-        self.actionAbout = QAction(QIcon(":/imgInstragram/images/info.png"), u"About", self.iface.mainWindow())
-        self.iface.addPluginToMenu(u"&Instragram2qgis", self.actionAbout)
+        self.actionAbout = QAction(QIcon(":/imgInstagram/images/info.png"), u"About", self.iface.mainWindow())
+        self.iface.addPluginToMenu(u"&Instagram2qgis", self.actionAbout)
         self.actionAbout.triggered.connect(self.About)
 
 
     def unload(self):
-        self.iface.removePluginMenu(u"&Instragram2qgis", self.action)
-        self.iface.removePluginMenu(u"&Instragram2qgis", self.actionAbout)
+        self.iface.removePluginMenu(u"&Instagram2qgis", self.action)
+        self.iface.removePluginMenu(u"&Instagram2qgis", self.actionAbout)
         self.iface.removeToolBarIcon(self.action)
 
     def About(self):
@@ -76,6 +70,51 @@ class Insta2QgisTool:
         return
     
     def run(self):
+        self.Prerequisites()#Check libraries
         self.dlg = Insta2QgisDialog(self.iface)
         self.dlg.setWindowFlags(Qt.WindowSystemMenuHint | Qt.WindowTitleHint) 
         self.dlg.exec_()
+           
+    #Check Prerequisites
+    def Prerequisites(self):
+        try:
+            from instagram.client import InstagramAPI
+            import requests,httplib2,simplejson,six
+        except ImportError:
+            plugin_dir = os.path.dirname(__file__).replace("\\", "/")+"/lib"          
+            prefixPath=QgsApplication.prefixPath().replace("\\", "/")+"/python"        
+            ret = QtGui.QMessageBox.question(self, "Missing libraries!", 
+                                    self.tr("The missing libraries can be found at: \n\n'"+plugin_dir+"'\n\n"+
+                                    "You must copy them to:\n\n"+
+                                     "'"+prefixPath+"'\n\n"
+                                     +"Do you want to copy the libraries automatically?\n\n"),
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+                                     
+            if ret == QMessageBox.Yes:
+                
+                self.copyDirectory(plugin_dir.replace("/", "\\")+"\\instagram", prefixPath.replace("/", "\\")+"\\instagram","instagram")
+                self.copyDirectory(plugin_dir.replace("/", "\\")+"\\httplib2", prefixPath.replace("/", "\\")+"\\httplib2","httplib2")
+                self.copyDirectory(plugin_dir.replace("/", "\\")+"\\requests", prefixPath.replace("/", "\\")+"\\requests","requests")
+                self.copyDirectory(plugin_dir.replace("/", "\\")+"\\simplejson", prefixPath.replace("/", "\\")+"\\simplejson","simplejson")
+                self.copyDirectory(plugin_dir.replace("/", "\\")+"\\six", prefixPath.replace("/", "\\")+"\\six","six")
+                
+                return
+            if ret == QMessageBox.No:
+                self.iface.messageBar().pushMessage("Warning: ", "Remember to copy the missing libraries manually" ,level=QgsMessageBar.INFO, duration=3) 
+                return
+        return
+    
+    #Copy libs
+    def copyDirectory(self,src, dest,name):
+        src=src+"\\"
+        dest=dest+"\\"
+        try:
+            shutil.copytree(src, dest)
+            self.iface.messageBar().pushMessage("Warning: ", "Libraries  "+name+" copied satisfactorily" ,level=QgsMessageBar.INFO, duration=3)
+        # Directories are the same
+        except shutil.Error as e:
+            self.iface.messageBar().pushMessage("Error: ", "Library not copied.Directories are the same. Error: %s" % e, level=QgsMessageBar.CRITICAL, duration=3)
+        # Any error saying that the directory doesn't exist
+        except OSError as e:
+            self.iface.messageBar().pushMessage("Error: ", "Library not copied. Error: %s" % e, level=QgsMessageBar.CRITICAL, duration=3)
+        
