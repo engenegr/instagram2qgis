@@ -29,10 +29,13 @@ You also need an "ACCESS TOKEN" and an "ACCESS CLIENT". To obtain them, you must
 Once created, a “CLIENT ID” and a “CLIENT SECRET” will be provided and you can create the “ACCESS TOKEN" by accessing the following [link](http://instagram.pixelunion.net/)
 
 
- 
+## Donations
+Want to buy me a beer (or gadget)? Please use Paypal button on the project page,[link](paypal.me/all4gis),or contact me directly.
+
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)]
+(https://www.paypal.com/cgi-bin/webscr?button=donate&business=5329N9XX4WQHY&item_name=Instagram2Qgis+Plugin&quantity=&amount=&currency_code=EUR&shipping=&tax=&notify_url=&cmd=_donations&bn=JavaScriptButton_donate&env=www)
+
+If this plugin is useful for you, consider to donate to the author.
+
+
 [© All4gis 2016]
-
-
-
-
-
