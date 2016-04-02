@@ -26,7 +26,6 @@ import urlparse
 #         / %x70000-7FFFD / %x80000-8FFFD / %x90000-9FFFD
 #         / %xA0000-AFFFD / %xB0000-BFFFD / %xC0000-CFFFD
 #         / %xD0000-DFFFD / %xE1000-EFFFD
-
 escape_range = [
     (0xA0, 0xD7FF),
     (0xE000, 0xF8FF),

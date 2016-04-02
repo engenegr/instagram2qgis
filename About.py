@@ -21,16 +21,12 @@
 """ 
 import os.path
 import subprocess
-
-from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from gui.generated.About import Ui_About
 from qgis.core import *
 from qgis.gui import *
-from qgis.gui import QgsMessageBar
-
-
+ 
 try:
     import sys
     from pydevd import *
@@ -38,9 +34,9 @@ except:
     None
 
  
-class AboutDialog(QtGui.QDialog, Ui_About):
+class AboutDialog(QDialog, Ui_About):
     def __init__(self, iface):      
-        QtGui.QDialog.__init__(self)
+        QDialog.__init__(self)
         self.setupUi(self)
         self.iface = iface
         self.plugin_dir = os.path.dirname(__file__) 

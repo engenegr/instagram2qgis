@@ -16,8 +16,8 @@ If no paths are provided, it takes its input from stdin.
 from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
-import sys
 from io import open
+import sys
 
 from chardet import __version__
 from chardet.universaldetector import UniversalDetector

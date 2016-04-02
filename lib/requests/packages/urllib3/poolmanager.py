@@ -1,18 +1,21 @@
 from __future__ import absolute_import
-import logging
 
-try:  # Python 3
-    from urllib.parse import urljoin
-except ImportError:
-    from urlparse import urljoin
+import logging
 
 from ._collections import RecentlyUsedContainer
 from .connectionpool import HTTPConnectionPool, HTTPSConnectionPool
 from .connectionpool import port_by_scheme
 from .exceptions import LocationValueError, MaxRetryError, ProxySchemeUnknown
 from .request import RequestMethods
-from .util.url import parse_url
 from .util.retry import Retry
+from .util.url import parse_url
+
+
+try:  # Python 3
+    from urllib.parse import urljoin
+except ImportError:
+    from urlparse import urljoin
+
 
 
 __all__ = ['PoolManager', 'ProxyManager', 'proxy_from_url']

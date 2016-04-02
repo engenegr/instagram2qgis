@@ -5,6 +5,7 @@ http://code.activestate.com/recipes/576693/
 """
 from UserDict import DictMixin
 
+
 # Modified from original to support Python 2.4, see
 # http://code.google.com/p/simplejson/issues/detail?id=53
 try:

@@ -1,9 +1,10 @@
-import sys
 import codecs
+from simplejson.compat import unichr, text_type, b, u, BytesIO
+import sys
 from unittest import TestCase
 
 import simplejson as json
-from simplejson.compat import unichr, text_type, b, u, BytesIO
+
 
 class TestUnicode(TestCase):
     def test_encoding1(self):

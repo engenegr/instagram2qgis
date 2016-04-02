@@ -2,11 +2,15 @@
     <qresource prefix="imgInstagram" >
         <file>../images/icon.png</file>
 		<file>../images/info.png</file>
-		<file>../images/folder.png</file>
-		<file>../images/click.png</file>
-		<file>../images/icon_map.svg</file>
-		<file>../images/icon_photos.svg</file>
-		<file>../images/icon_users.svg</file>
-		<file>../images/icon_places.svg</file>
+		<file>../images/folder.png</file>	 
+		<file>../images/icon_map.png</file>
+		<file>../images/icon_photos.png</file>
+		<file>../images/icon_users.png</file>
+		<file>../images/icon_places.png</file>
+		<file>../images/icon_users_feed.png</file>
+		<file>../images/icon_users_recent.png</file>		
+		<file>../images/icon_users_follow.png</file>			
+		<file>../images/icon_popular.png</file>	 
+		<file>../images/click.png</file>	 
     </qresource>
 </RCC>

@@ -45,6 +45,7 @@ import socket
 import struct
 import sys
 
+
 if getattr(socket, 'socket', None) is None:
     raise ImportError('socket.socket missing, proxy support unusable')
 

@@ -55,19 +55,22 @@ try:
 except ImportError:
     pass
 
+import logging
+import warnings
+
 from . import utils
-from .models import Request, Response, PreparedRequest
 from .api import request, get, head, post, patch, put, delete, options
-from .sessions import session, Session
-from .status_codes import codes
 from .exceptions import (
     RequestException, Timeout, URLRequired,
     TooManyRedirects, HTTPError, ConnectionError,
     FileModeWarning,
 )
+from .models import Request, Response, PreparedRequest
+from .sessions import session, Session
+from .status_codes import codes
+
 
 # Set default logging handler to avoid "No handler found" warnings.
-import logging
 try:  # Python 2.7+
     from logging import NullHandler
 except ImportError:
@@ -77,7 +80,6 @@ except ImportError:
 
 logging.getLogger(__name__).addHandler(NullHandler())
 
-import warnings
 
 # FileModeWarnings go off per the default.
 warnings.simplefilter('default', FileModeWarning, append=True)

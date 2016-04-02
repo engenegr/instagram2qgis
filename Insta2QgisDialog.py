@@ -19,15 +19,18 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4 import QtCore, QtGui
+#from PyQt4 import Qt
+#from PyQt4.QtCore import QSettings,QSize,QFileInfo,QVariant
+#from PyQt4.QtGui import QDialog,QVBoxLayout,QToolBar,QFileDialog,QCursor,QPixmap,QMessageBox
+#from qgis.core import QgsMapLayerRegistry,QgsSvgMarkerSymbolLayerV2,QgsFeature,QgsVectorFileWriter,QgsPoint,QgsCoordinateTransform,QgsField,QgsVectorLayer,QgsRendererCategoryV2,QgsGeometry,QgsCategorizedSymbolRendererV2,QgsAction,QgsMapTool,QgsCoordinateReferenceSystem,QgsSymbolV2,QgsCoordinateReferenceSystem,QgsMessageBar
+ 
 import os.path
 from qgis.core import *
 from qgis.gui import *
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 from About import AboutDialog
 from gui.generated.ui_Insta2QgisTool import Ui_Insta2QgisToolDialog
-from pip.cmdoptions import src
  
 try:  
     import sys
@@ -49,20 +52,28 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         self.setupUi(self)
         self.iface = iface
         self.canvas=self.iface.mapCanvas()
-        self.AddAboutButton()
         self.settings = QSettings()
         self.settings.setValue("instagram2qgis/outpath", "")
+ 
+        width=600
+        height=450
         
+        self.setMinimumSize(QSize(width, height))
+        self.setMaximumSize(QSize(width, height))
+        
+        self.AddAboutButton()
+        self.HideGroupBox()
+        
+        self.TypeSearch="hashtags" #Default search
+ 
+    #Hide groupbox
+    def HideGroupBox(self):
         self.groupBox_user.hide()
         self.groupBox_location.hide()
         self.groupBox_popular.hide()
-        
-        self.setMinimumSize(QtCore.QSize(600, 350))
-        self.setMaximumSize(QtCore.QSize(600, 350))
-        
-        self.TypeSearch="tag" #Default search
- 
-
+        self.groupBox_location_id.hide()
+        return
+     
     # About
     def about(self):
         self.About = AboutDialog(self.iface)
@@ -98,7 +109,7 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
             values.append(str(list[i].name)) 
         return str(values).strip('[]')
  
-    #Capture coord in map
+    #Capture coords in map
     def captureCoord(self):
         self.hide()
         self.mapTool = CopyCoords(self.iface,parent=self)
@@ -111,34 +122,60 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         
     #Toggle GroupBox
     def TypeSearch(self,value):
-        self.groupBox_user.hide()
-        self.groupBox_location.hide()
-        self.groupBox_tags.hide()
-        self.groupBox_popular.hide()     
         
+        self.HideGroupBox()
+        self.groupBox_tags.hide()
+        self.sp_count.hide() 
+        self.label_4.hide()
+ 
         sender = self.sender().objectName()
+        
         if(value):
+            
             if sender == "ch_hashtags":
-                self.groupBox_tags.show()   
-                self.TypeSearch="tag"                
+                self.groupBox_tags.show()
+                self.sp_count.show()  
+                self.label_4.show() 
+                self.TypeSearch="hashtags" 
+                               
             elif sender == "ch_user":
+                self.lnId.setPlaceholderText("Instagram")  
+                self.label_3.setText("User name")  
                 self.groupBox_user.show()
-                self.TypeSearch="user"              
+                self.TypeSearch="user"   
+                           
             elif sender == "ch_location":
                 self.groupBox_location.show()
-                self.TypeSearch="location"             
+                self.TypeSearch="coords" 
+                            
             elif sender == "ch_popular":
                 self.groupBox_popular.show()
                 self.TypeSearch="popular"
-                return
-        
+                
+            elif sender == "ch_user_recent":
+                self.groupBox_popular.show()
+                self.TypeSearch="user_recent"
+                
+            elif sender == "ch_user_media":
+                self.groupBox_popular.show()
+                self.TypeSearch="user_media"
+                
+            elif sender == "ch_location_recent":
+                self.groupBox_location_id.show()
+                self.TypeSearch="location_recent"
+                
+            elif sender == "ch_user_follow":
+                self.lnId.setPlaceholderText("25025320")   
+                self.label_3.setText("User ID")            
+                self.groupBox_user.show()
+                self.TypeSearch="user_follow"
         return
          
     #Principal process
     def InstagramProcces(self):
- 
-        self.aceptar.setCursor(QtGui.QCursor(QtCore.Qt.ForbiddenCursor))
-        self.aceptar.setCursor(QtGui.QCursor(QtCore.Qt.ForbiddenCursor))
+        
+        self.aceptar.setCursor(QCursor(Qt.ForbiddenCursor))
+        self.update_progressbar(10)
         
         access_token = self.lnToken.text()
         client_secret = self.lnAcces.text()
@@ -147,98 +184,204 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         #Put your values here for use.       
 #         access_token =""
 #         client_secret =""
-
  
         if not access_token or not client_secret:
-            QtGui.QMessageBox.information(self, "Empty values", "Complete mandatory items <access_token> and <client_secret>", QtGui.QMessageBox.AcceptRole)
+            QMessageBox.information(self, "Empty values", "Complete mandatory items <access_token> and <client_secret>", QMessageBox.AcceptRole)
             return  
         try:
-            count=self.sp_count.value() 
-            self.update_progressbar(50)
-            
             api = InstagramAPI(access_token=access_token, client_secret=client_secret)
-
-            categorized,layer=self.CreateShape()
+ 
             #Search recent media with Tag       
-            if self.TypeSearch=="tag":
-                 
+            if self.TypeSearch=="hashtags":
+                count=self.sp_count.value()  
                 tag=self.ln_tags.text()
-                
+                #tag="Madrid"
+                if tag=="":
+                    QMessageBox.information(self, "Empty values", "Tag value is empty", QMessageBox.AcceptRole)
+                    self.aceptar.setCursor(QCursor(Qt.PointingHandCursor))
+                    self.update_progressbar(0)
+                    return  
+            
                 tag_search, next_tag = api.tag_search(tag)
                 tag_recent_media, next = api.tag_recent_media(count,tag_name=tag_search[0].name)
- 
-                if len(tag_recent_media)==0:
-                    self.iface.messageBar().pushMessage("Error: ", "No photos available,please try again"+str(e),level=QgsMessageBar.INFO, duration=3) 
-                    return
- 
+                
+                #return self.Checklength() if len(tag_recent_media)==0 else [self.AddFeatures(tag_media,layer,categorized) for tag_media in tag_recent_media]
+                 
+                if len(tag_recent_media)==0:return self.Checklength()
+                categorized,layer=self.CreateShape()
                 for tag_media in tag_recent_media: 
                     self.AddFeatures(tag_media,layer,categorized)
                     
             #Search recent media with Location              
-            elif self.TypeSearch=="location":
+            elif self.TypeSearch=="coords":
                 #Search with Location
                 lat=self.ln_lat.text()
                 lng=self.ln_lng.text()
                 distance=self.sp_distance.value()                    
                 location_search =api.media_search(lat=str(lat),lng=str(lng), distance=int(distance))  
-                if len(location_search)==0:
-                    self.iface.messageBar().pushMessage("Error: ", "No photos available,please try again"+str(e),level=QgsMessageBar.INFO, duration=3) 
-                    return
-                
+
+                if len(location_search)==0:return self.Checklength()
+                categorized,layer=self.CreateShape()
                 for location in location_search:
                     self.AddFeatures(location,layer,categorized)          
- 
+  
             #Search recent media with user 
-            elif self.TypeSearch=="user":
-                user_id=self.lnId.text()
-                user_search = api.user_search(q=user_id)
-                
-                if len(user_search)==0:
-                    self.iface.messageBar().pushMessage("Error: ", "No photos available,please try again"+str(e),level=QgsMessageBar.INFO, duration=3) 
+            elif self.TypeSearch=="user":                
+                if self.lnId.text()=="":
+                    QMessageBox.information(self, "Empty values", "User name value is empty", QMessageBox.AcceptRole)
+                    self.aceptar.setCursor(QCursor(Qt.PointingHandCursor))
+                    self.update_progressbar(0)
                     return
                 
-                for user in user_search:
-                    self.AddFeatures(user,layer,categorized)   
+                user_name=self.lnId.text()
+                #user_name="Instagram"
+                user_search = api.user_search(user_name)
 
+                if len(user_search)==0:return self.Checklength()
+                layer=self.CreateShapeMin()
+                for user in user_search:
+                    self.AddFeaturesMin(user,layer)   
+
+            #Search user recent 
+            elif self.TypeSearch=="user_recent": 
+                recent_media, next = api.user_recent_media()
+
+                if len(recent_media)==0:return self.Checklength() 
+                categorized,layer=self.CreateShape()
+                for media in recent_media:
+                    self.AddFeatures(media,layer,categorized) 
+                          
+            #Search User Media Feed    
+            elif self.TypeSearch=="user_media":            
+                media_feed, next = api.user_media_feed()
+
+                if len(media_feed)==0:return self.Checklength() 
+                categorized,layer=self.CreateShape()
+                for media in media_feed:
+                    self.AddFeatures(media,layer,categorized) 
+            
+            #Search User follow
+            elif self.TypeSearch=="user_follow":
+                #user_id="25025320"
+                if self.lnId.text()=="":
+                    QMessageBox.information(self, "Empty values", "User ID value is empty", QMessageBox.AcceptRole)
+                    self.aceptar.setCursor(QCursor(Qt.PointingHandCursor))
+                    self.update_progressbar(0)
+                    return 
+                
+                user_follows, next = api.user_follows(user_id)
+                
+                if len(user_follows)==0:return self.Checklength()
+                layer=self.CreateShapeMin()
+                for user in user_follows:
+                    self.AddFeaturesMin(user,layer) 
+             
+            #Search Location recent
+            elif self.TypeSearch=="location_recent":
+                
+                if self.ln_loc_id.text()=="":
+                    QMessageBox.information(self, "Empty values", "Location ID value is empty", QMessageBox.AcceptRole)
+                    self.aceptar.setCursor(QCursor(Qt.PointingHandCursor))
+                    self.update_progressbar(0)
+                    return  
+
+                location_id=int(self.ln_loc_id.text())
+                #location_id=514276
+                recent_media, next = api.location_recent_media(location_id=location_id)
+                
+                if len(recent_media)==0:return self.Checklength()
+                categorized,layer=self.CreateShape()
+                for media in recent_media:
+                    self.AddFeatures(media,layer,categorized)
+ 
             #Search recent popular 
-            elif self.TypeSearch=="popular":
-                 
+            elif self.TypeSearch=="popular": 
                 media_search = api.media_popular()
                 
-                if len(media_search)==0:
-                    self.iface.messageBar().pushMessage("Error: ", "No photos available,please try again"+str(e),level=QgsMessageBar.INFO, duration=3) 
-                    return
-                
+                if len(media_search)==0:return self.Checklength() 
+                categorized,layer=self.CreateShape()
                 for media in media_search:
                     self.AddFeatures(media,layer,categorized)  
-                           
-                    
+  
             #Save layer in output path
             QgsVectorFileWriter.writeAsVectorFormat(layer,self.settings.value("instagram2qgis/outpath"), "CP1250", None, "ESRI Shapefile")
  
             self.update_progressbar(100)
 
-            self.aceptar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-            self.aceptar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor)) 
-            
+            self.aceptar.setCursor(QCursor(Qt.PointingHandCursor))
+ 
             self.reject()
             
         except Exception, e:
-            self.iface.messageBar().pushMessage("Error: ", "fail to load photos: "+str(e),level=QgsMessageBar.CRITICAL, duration=3) 
-            
-            self.aceptar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-            self.aceptar.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+            self.iface.messageBar().pushMessage("Error: ", "fail to load photos: "+str(e),level=QgsMessageBar.CRITICAL, duration=20)             
+            self.aceptar.setCursor(QCursor(Qt.PointingHandCursor))
+             
         return
  
+    #Message length media
+    def Checklength(self):
+        self.iface.messageBar().pushMessage("Error: ", "No photos available,please try again",level=QgsMessageBar.INFO, duration=3)
+        self.update_progressbar(0)
+        self.aceptar.setCursor(QCursor(Qt.PointingHandCursor))
+        return
     
+    #Create shape for media min
+    def CreateShapeMin(self): 
+        
+        self.update_progressbar(20)        
+        layer = QgsVectorLayer('Point?crs=EPSG:4326', 'instagram_point', "memory")
+        provider = layer.dataProvider()
+        provider.addAttributes([QgsField("user_id", QVariant.Int)])
+        provider.addAttributes([QgsField("user_name", QVariant.String)])
+        provider.addAttributes([QgsField("user_full_name", QVariant.String)])
+        provider.addAttributes([QgsField("user_profile_picture", QVariant.String)])
+ 
+        layer.updateFields()
+ 
+        self.update_progressbar(30)
+ 
+        self.AddActions(layer)       
+ 
+        #Add Layer to canvas
+        QgsMapLayerRegistry.instance().addMapLayer(layer)
+ 
+        return layer  
+    
+    #Add features to shape
+    def AddFeaturesMin(self,media,layer):
+         
+        self.update_progressbar(40)
+        fet = QgsFeature()
+        
+        try: user_id = media.id
+        except: user_id =""
+        try: user_name = media.username
+        except: user_name =""
+        try: user_full_name = media.full_name
+        except: user_full_name =""
+        try: user_profile_picture = media.profile_picture
+        except: user_profile_picture =""
+ 
+        fet.setAttributes([user_id,user_name,user_full_name,user_profile_picture])
+        pr = layer.dataProvider()
+        pr.addFeatures([fet])
+ 
+        return
+                          
     #Create shape
     def CreateShape(self): 
+        
+        self.update_progressbar(20)
+        
         layer = QgsVectorLayer('Point?crs=EPSG:4326', 'instagram_point', "memory")
         
         provider = layer.dataProvider()
-        provider.addAttributes([QgsField("id", QVariant.String)])
+        provider.addAttributes([QgsField("id_photo", QVariant.String)])
         provider.addAttributes([QgsField("text", QVariant.String)])
-        provider.addAttributes([QgsField("user", QVariant.String)])
+        provider.addAttributes([QgsField("user_name", QVariant.String)])
+        provider.addAttributes([QgsField("user_full_name", QVariant.String)])
+        provider.addAttributes([QgsField("user_id", QVariant.Int)])
+        provider.addAttributes([QgsField("user_profile_picture", QVariant.String)])
         provider.addAttributes([QgsField("comments", QVariant.String)])
         provider.addAttributes([QgsField("comments_count", QVariant.Int)])
         provider.addAttributes([QgsField("likes_count", QVariant.Int)])
@@ -253,25 +396,45 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
  
         layer.updateFields()
  
-        self.update_progressbar(50)
+        self.update_progressbar(30)
 
         categorized = []
-        renderer = QgsCategorizedSymbolRendererV2("id", categorized)
+        renderer = QgsCategorizedSymbolRendererV2("id_photo", categorized)
         layer.setRendererV2(renderer)
+        
+        self.AddActions(layer)       
+ 
+        #Add Layer to canvas
         QgsMapLayerRegistry.instance().addMapLayer(layer)
  
         return  categorized,layer
     
+    def AddActions(self,layer):
+        #Add actions layers to open video and photo
+        actions = layer.actions()   
+        actions.addAction(QgsAction.OpenUrl, 'Open photo in browser', '[% "photo" %]')
+        actions.addAction(QgsAction.OpenUrl, 'Open video in browser', '[% "video" %]')       
+        actions.addAction(QgsAction.OpenUrl, 'Open link profile in browser', '[% "link_profile" %]')   
+        
+        return
+    
     #Add features to shape
     def AddFeatures(self,media,layer,categorized):
- 
+         
+        self.update_progressbar(40)
         fet = QgsFeature()
-        try: id = media.id
-        except: id =""     
+        try: id_photo = media.id
+        except: id_photo =""     
         try: text = media.caption.text
         except: text =""
-        try: user = media.caption.user.full_name
-        except: user =""
+        try: user_name = media.caption.user.username
+        except: user_name =""
+        try: user_full_name = media.caption.user.full_name
+        except: user_full_name =""
+        try: user_id = media.caption.user.id
+        except: user_id =""
+        try: user_profile_picture = media.caption.user.profile_picture
+        except: user_profile_picture =""
         try: comments = str(media.comments).strip('[]')
         except: comments =""
         try: comments_count = media.comments_count
@@ -282,8 +445,8 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         except: created_time =""
         try: link_profile = media.link
         except: link_profile =""
-        try: type = media.type
-        except: type =""
+        try: media_type = media.type
+        except: media_type =""
         try: latitude = media.location.point.latitude
         except: latitude =""
         try: longitude = media.location.point.longitude
@@ -298,7 +461,7 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         if longitude!="":
             fet.setGeometry(QgsGeometry.fromPoint(QgsPoint(float(longitude),float(latitude))))
  
-        fet.setAttributes([id,text, user, comments,comments_count,likes_count, created_time,link_profile,type, latitude, longitude,  tags, photo,video])
+        fet.setAttributes([id_photo,text, user_name,user_full_name,user_id,user_profile_picture,comments,comments_count,likes_count, created_time,link_profile,media_type, latitude, longitude,  tags, photo,video])
         pr = layer.dataProvider()
         pr.addFeatures([fet])
         
@@ -308,11 +471,10 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
     
     #Create marker with instagram photo
     def CreateMarker(self,categorized,media,thumb,layer):
-        self.update_progressbar(75) 
+        self.update_progressbar(50) 
                
         startSvgTag = """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         <svg><g>"""
-        
         endSvgTag = """ </g></svg>"""
          
         data = requests.get(thumb, stream=True).content   
@@ -320,14 +482,14 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         base64String = '<image xlink:href="data:image/png;base64,{0}" width="320" height="240"/>'.format(base64data)
         
         if self.settings.value("instagram2qgis/outpath")=="" :
-            path =tempfile.gettempdir() + os.sep + media.id + '_i.jpg.svg'
+            path =tempfile.gettempdir() + os.sep + media.id + '.jpg.svg'
         else:
             #Icons
             p=QFileInfo(self.settings.value("instagram2qgis/outpath")).path()+ os.sep 
             svgpath = p + "instagram_svg"
             if not os.path.exists(svgpath): 
                 os.makedirs(svgpath)
-            path = svgpath + os.sep + media.id + '_i.jpg.svg'
+            path = svgpath + os.sep + media.id + '.jpg.svg'
             #Style
             qmlpath = p +"instagram_qml"
             if not os.path.exists(qmlpath): 
@@ -337,9 +499,8 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
             f.write( startSvgTag + base64String + endSvgTag)
    
         svgStyle = {}
-        #svgStyle['fill'] = '#0000ff'
-        svgStyle['name'] = path
-        #svgStyle['outline'] = '#000000'
+        
+        svgStyle['name'] = path 
         svgStyle['size'] = '30'
         sym_image = QgsSvgMarkerSymbolLayerV2.create(svgStyle)
         
@@ -347,7 +508,7 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         symbol.changeSymbolLayer(0, sym_image)
         new_category = QgsRendererCategoryV2(str(media.id), symbol,str(media.id))
         categorized.append(new_category)
-        renderer = QgsCategorizedSymbolRendererV2("id", categorized)
+        renderer = QgsCategorizedSymbolRendererV2("id_photo", categorized)
         layer.setRendererV2(renderer)
         
         layer.updateExtents()
@@ -359,6 +520,7 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         except:
             None
         
+        self.update_progressbar(75) 
         return
         
 

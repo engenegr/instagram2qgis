@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+
 import logging
 import os
 import warnings
@@ -11,12 +12,12 @@ from ..exceptions import (
     TimeoutError,
     SSLError
 )
-
 from ..packages.six import BytesIO
 from ..request import RequestMethods
 from ..response import HTTPResponse
-from ..util.timeout import Timeout
 from ..util.retry import Retry
+from ..util.timeout import Timeout
+
 
 try:
     from google.appengine.api import urlfetch

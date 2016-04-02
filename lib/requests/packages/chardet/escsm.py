@@ -27,6 +27,7 @@
 
 from .constants import eStart, eError, eItsMe
 
+
 HZ_cls = (
 1,0,0,0,0,0,0,0,  # 00 - 07
 0,0,0,0,0,0,0,0,  # 08 - 0f

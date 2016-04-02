@@ -1,10 +1,12 @@
 from __future__ import absolute_import
+
 import decimal
+from simplejson import OrderedDict
+from simplejson.compat import StringIO
 from unittest import TestCase
 
 import simplejson as json
-from simplejson.compat import StringIO
-from simplejson import OrderedDict
+
 
 class TestDecode(TestCase):
     if not hasattr(TestCase, 'assertIs'):

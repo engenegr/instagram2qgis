@@ -26,12 +26,12 @@
 ######################### END LICENSE BLOCK #########################
 
 from .charsetprober import CharSetProber
-from .constants import eNotMe, eDetecting
 from .compat import wrap_ord
+from .constants import eNotMe, eDetecting
+
 
 # This prober doesn't actually recognize a language or a charset.
 # It is a helper prober for the use of the Hebrew model probers
-
 ### General ideas of the Hebrew charset recognition ###
 #
 # Four main charsets exist in Hebrew:
@@ -125,7 +125,6 @@ from .compat import wrap_ord
 # decision is made according to the final-letters scores maintained and Both
 # model probers scores. The answer is returned in the form of the name of the
 # charset identified, either "windows-1255" or "ISO-8859-8".
-
 # windows-1255 / ISO-8859-8 code points of interest
 FINAL_KAF = 0xea
 NORMAL_KAF = 0xeb

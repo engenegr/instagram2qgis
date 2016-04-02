@@ -8,7 +8,11 @@ The images can be downloaded by the following parameters:
 - Search photos by hashtags
 - Search Instagram users
 - Search photos by location on map
-- Search popular photos	
+- Search popular photos
+- Search user follows
+- Search user recent media
+- Search user media feed
+- Search Location recent media
 
 [Example](https://github.com/All4Gis/instagram2qgis/tree/master/example)
 

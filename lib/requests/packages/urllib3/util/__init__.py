@@ -1,8 +1,9 @@
 from __future__ import absolute_import
-# For backwards compatibility, provide imports that used to be here.
+
 from .connection import is_connection_dropped
 from .request import make_headers
 from .response import is_fp_closed
+from .retry import Retry
 from .ssl_ import (
     SSLContext,
     HAS_SNI,
@@ -15,8 +16,6 @@ from .timeout import (
     current_time,
     Timeout,
 )
-
-from .retry import Retry
 from .url import (
     get_host,
     parse_url,
@@ -24,6 +23,8 @@ from .url import (
     Url,
 )
 
+
+# For backwards compatibility, provide imports that used to be here.
 __all__ = (
     'HAS_SNI',
     'SSLContext',

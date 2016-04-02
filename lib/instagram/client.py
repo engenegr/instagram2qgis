@@ -1,6 +1,7 @@
-import oauth2
 from bind import bind_method
 from models import MediaShortcode, Media, User, Location, Tag, Comment, Relationship
+import oauth2
+
 
 MEDIA_ACCEPT_PARAMETERS = ["count", "max_id"]
 SEARCH_ACCEPT_PARAMETERS = ["q", "count"]

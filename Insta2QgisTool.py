@@ -19,16 +19,16 @@
  *                                                                         *
  ***************************************************************************/
 """
-import os.path,shutil
- 
+import os.path, shutil
+
 from About import AboutDialog
 from Insta2QgisDialog import Insta2QgisDialog
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import gui.generated.resources_rc
 from qgis.core import *
- 
- 
+from qgis.gui import *
+
 class Insta2QgisTool:
 
     """QGIS Plugin Implementation."""
@@ -74,7 +74,10 @@ class Insta2QgisTool:
         self.dlg = Insta2QgisDialog(self.iface)
         self.dlg.setWindowFlags(Qt.WindowSystemMenuHint | Qt.WindowTitleHint) 
         self.dlg.exec_()
-           
+        
+    def tr(self, message):
+        return QCoreApplication.translate('Instagram2qgis', message)  
+       
     #Check Prerequisites
     def Prerequisites(self):
         try:
@@ -83,7 +86,7 @@ class Insta2QgisTool:
         except ImportError:
             plugin_dir = os.path.dirname(__file__).replace("\\", "/")+"/lib"          
             prefixPath=QgsApplication.prefixPath().replace("\\", "/")+"/python"        
-            ret = QtGui.QMessageBox.question(self, "Missing libraries!", 
+            ret = QMessageBox.question(None, self.tr("Missing libraries!"), 
                                     self.tr("The missing libraries can be found at: \n\n'"+plugin_dir+"'\n\n"+
                                     "You must copy them to:\n\n"+
                                      "'"+prefixPath+"'\n\n"
