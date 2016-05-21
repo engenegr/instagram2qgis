@@ -1,4 +1,3 @@
-from __future__ import generators
 """
 httplib2
 
@@ -12,6 +11,33 @@ Changelog:
 
 """
 
+from __future__ import generators
+
+import base64
+import calendar
+import copy
+import email
+import errno
+from gettext import gettext as _
+import gzip
+import hmac
+import os
+import random
+import re
+import socket
+import sys
+import time
+import urllib
+import zlib
+
+import StringIO
+import email.FeedParser
+import email.Message
+import email.Utils
+import httplib
+import urlparse
+
+
 __author__ = "Joe Gregorio (joe@bitworking.org)"
 __copyright__ = "Copyright 2006, Joe Gregorio"
 __contributors__ = ["Thomas Broyer (t.broyer@ltgt.net)",
@@ -24,25 +50,6 @@ __contributors__ = ["Thomas Broyer (t.broyer@ltgt.net)",
 __license__ = "MIT"
 __version__ = "0.9.2"
 
-import re
-import sys
-import email
-import email.Utils
-import email.Message
-import email.FeedParser
-import StringIO
-import gzip
-import zlib
-import httplib
-import urlparse
-import urllib
-import base64
-import os
-import copy
-import calendar
-import time
-import random
-import errno
 try:
     from hashlib import sha1 as _sha, md5 as _md5
 except ImportError:
@@ -51,9 +58,6 @@ except ImportError:
     import md5
     _sha = sha.new
     _md5 = md5.new
-import hmac
-from gettext import gettext as _
-import socket
 
 try:
     from httplib2 import socks

@@ -1,11 +1,16 @@
 """Implementation of JSONEncoder
 """
 from __future__ import absolute_import
-import re
-from operator import itemgetter
-# Do not import Decimal directly to avoid reload issues
+
 import decimal
+from operator import itemgetter
+import re
+from simplejson.decoder import PosInf
+
 from .compat import u, unichr, binary_type, string_types, integer_types, PY3
+
+
+# Do not import Decimal directly to avoid reload issues
 def _import_speedups():
     try:
         from . import _speedups
@@ -14,7 +19,6 @@ def _import_speedups():
         return None, None
 c_encode_basestring_ascii, c_make_encoder = _import_speedups()
 
-from simplejson.decoder import PosInf
 
 #ESCAPE = re.compile(ur'[\x00-\x1f\\"\b\f\n\r\t\u2028\u2029]')
 # This is required because u() will mangle the string and ur'' isn't valid

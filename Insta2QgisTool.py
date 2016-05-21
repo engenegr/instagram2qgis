@@ -19,16 +19,21 @@
  *                                                                         *
  ***************************************************************************/
 """
-import os.path,shutil
- 
+import os.path, shutil
+
 from About import AboutDialog
 from Insta2QgisDialog import Insta2QgisDialog
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 import gui.generated.resources_rc
 from qgis.core import *
- 
- 
+from qgis.gui import *
+try:  
+    import sys
+    from pydevd import *
+except:
+    None 
+
 class Insta2QgisTool:
 
     """QGIS Plugin Implementation."""
@@ -70,40 +75,53 @@ class Insta2QgisTool:
         return
     
     def run(self):
-        self.Prerequisites()#Check libraries
+        #Check libraries
+        self.Prerequisites()
+        self.Prerequisites("requests") 
+        self.Prerequisites("httplib2") 
+        self.Prerequisites("simplejson")
+        self.Prerequisites("six") 
+        
         self.dlg = Insta2QgisDialog(self.iface)
         self.dlg.setWindowFlags(Qt.WindowSystemMenuHint | Qt.WindowTitleHint) 
         self.dlg.exec_()
-           
+        
+    def tr(self, message):
+        return QCoreApplication.translate('Instagram2qgis', message)  
+       
     #Check Prerequisites
-    def Prerequisites(self):
+    def Prerequisites(self,name=None):
         try:
-            from instagram.client import InstagramAPI
-            import requests,httplib2,simplejson,six
-        except ImportError:
+            if name==None:
+                name="instagram"
+                from instagram.client import InstagramAPI
+            elif name=="requests":
+                import requests
+            elif name=="httplib2":
+                import httplib2
+            elif name=="simplejson":
+                import simplejson
+            elif name=="six":
+                import six
+        except:
             plugin_dir = os.path.dirname(__file__).replace("\\", "/")+"/lib"          
             prefixPath=QgsApplication.prefixPath().replace("\\", "/")+"/python"        
-            ret = QtGui.QMessageBox.question(self, "Missing libraries!", 
-                                    self.tr("The missing libraries can be found at: \n\n'"+plugin_dir+"'\n\n"+
+            ret = QMessageBox.question(None, self.tr("Missing library "+name+" !"), 
+                                    self.tr("The missing library can be found at: \n\n'"+plugin_dir+"'\n\n"+
                                     "You must copy them to:\n\n"+
                                      "'"+prefixPath+"'\n\n"
-                                     +"Do you want to copy the libraries automatically?\n\n"),
+                                     +"Do you want to copy the library "+name+" automatically?\n\n"+
+                                     "Remember restart Qgis when You install all necessary libraries for use it."),
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
                                      
-            if ret == QMessageBox.Yes:
-                
-                self.copyDirectory(plugin_dir.replace("/", "\\")+"\\instagram", prefixPath.replace("/", "\\")+"\\instagram","instagram")
-                self.copyDirectory(plugin_dir.replace("/", "\\")+"\\httplib2", prefixPath.replace("/", "\\")+"\\httplib2","httplib2")
-                self.copyDirectory(plugin_dir.replace("/", "\\")+"\\requests", prefixPath.replace("/", "\\")+"\\requests","requests")
-                self.copyDirectory(plugin_dir.replace("/", "\\")+"\\simplejson", prefixPath.replace("/", "\\")+"\\simplejson","simplejson")
-                self.copyDirectory(plugin_dir.replace("/", "\\")+"\\six", prefixPath.replace("/", "\\")+"\\six","six")
-                
+            if ret == QMessageBox.Yes:                
+                self.copyDirectory(plugin_dir.replace("/", "\\")+"\\"+name, prefixPath.replace("/", "\\")+"\\"+name,name)
                 return
             if ret == QMessageBox.No:
                 self.iface.messageBar().pushMessage("Warning: ", "Remember to copy the missing libraries manually" ,level=QgsMessageBar.INFO, duration=3) 
                 return
         return
-    
+ 
     #Copy libs
     def copyDirectory(self,src, dest,name):
         src=src+"\\"

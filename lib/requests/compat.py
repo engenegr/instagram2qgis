@@ -4,14 +4,14 @@
 pythoncompat
 """
 
+import sys
+
 from .packages import chardet
 
-import sys
 
 # -------
 # Pythons
 # -------
-
 # Syntax sugar.
 _ver = sys.version_info
 

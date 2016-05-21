@@ -27,8 +27,8 @@
 
 from .constants import eStart, eError, eItsMe
 
-# BIG5
 
+# BIG5
 BIG5_cls = (
     1,1,1,1,1,1,1,1,  # 00 - 07    #allow 0x00 as legal value
     1,1,1,1,1,1,0,0,  # 08 - 0f

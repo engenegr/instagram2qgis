@@ -1,9 +1,11 @@
-import urllib
-from oauth2 import OAuth2Request
-import re
-from json_import import simplejson
-import hmac
 from hashlib import sha256
+import hmac
+import re
+import urllib
+
+from json_import import simplejson
+from oauth2 import OAuth2Request
+
 
 re_path_template = re.compile('{\w+}')
 

@@ -7,18 +7,18 @@ requests.auth
 This module contains the authentication handlers for Requests.
 """
 
+from base64 import b64encode
+import hashlib
 import os
 import re
-import time
-import hashlib
 import threading
-
-from base64 import b64encode
+import time
 
 from .compat import urlparse, str
 from .cookies import extract_cookies_to_jar
-from .utils import parse_dict_header, to_native_string
 from .status_codes import codes
+from .utils import parse_dict_header, to_native_string
+
 
 CONTENT_TYPE_FORM_URLENCODED = 'application/x-www-form-urlencoded'
 CONTENT_TYPE_MULTI_PART = 'multipart/form-data'

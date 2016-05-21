@@ -45,21 +45,25 @@ Module Variables
 '''
 from __future__ import absolute_import
 
+import select
+from socket import _fileobject, timeout, error as SocketError
+import ssl
+
+import OpenSSL.SSL
+from pyasn1.codec.der import decoder as der_decoder
+from pyasn1.type import univ, constraint
+
+from .. import connection
+from .. import util
+
+
 try:
     from ndg.httpsclient.ssl_peer_verification import SUBJ_ALT_NAME_SUPPORT
     from ndg.httpsclient.subj_alt_name import SubjectAltName as BaseSubjectAltName
 except SyntaxError as e:
     raise ImportError(e)
 
-import OpenSSL.SSL
-from pyasn1.codec.der import decoder as der_decoder
-from pyasn1.type import univ, constraint
-from socket import _fileobject, timeout, error as SocketError
-import ssl
-import select
 
-from .. import connection
-from .. import util
 
 __all__ = ['inject_into_urllib3', 'extract_from_urllib3']
 

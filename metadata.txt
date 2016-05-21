@@ -12,10 +12,10 @@
 [general]
 name=Instagram2qgis
 qgisMinimumVersion=2.0
-description=Instagram2qgis
+description=Search and downloading Instagram images.
 about=Search and downloading Instagram images and create a point shapefile with them.You need install some additional Python libraries:instagram,httplib2,requests,simplejson,six 
-version=0.1
-author=Francisco Raga Lopez
+version=0.3
+author=Francisco Raga
 email=franka1986@gmail.com
 
 # end of mandatory metadata
@@ -25,6 +25,17 @@ email=franka1986@gmail.com
 # Uncomment the following line and add your changelog entries:
 changelog=    
 	** General **
+	0.3:
+		- Fixed error (global name InstagramAPI is not defined)
+		- Minor changes.
+	0.2:
+		- Add search user follows
+		- Add search user recent media
+		- Add search user media feed
+		- Add search Location recent media
+		- Add actions to layer for open video and photo in browser.
+		- Add more instagram info in shapefile.
+		- Minor changes
 	0.1:
 		- Add search photos by hashtags
 		- Add search Instagram users
@@ -47,7 +58,7 @@ repository=https://github.com/All4Gis/instagram2qgis
 icon=images/icon.png
 
 # experimental flag
-experimental=True
+experimental=False
 
 # deprecated flag (applies to the whole plugin, not just a single version
 deprecated=False

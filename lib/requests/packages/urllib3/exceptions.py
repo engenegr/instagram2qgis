@@ -1,7 +1,7 @@
 from __future__ import absolute_import
+
+
 # Base Exceptions
-
-
 class HTTPError(Exception):
     "Base exception used by this module."
     pass

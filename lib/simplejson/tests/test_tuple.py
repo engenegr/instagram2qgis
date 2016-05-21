@@ -1,7 +1,8 @@
+from simplejson.compat import StringIO
 import unittest
 
-from simplejson.compat import StringIO
 import simplejson as json
+
 
 class TestTuples(unittest.TestCase):
     def test_tuple_array_dumps(self):

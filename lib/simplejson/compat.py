@@ -1,6 +1,8 @@
 """Python 3 compatibility shims
 """
 import sys
+
+
 if sys.version_info[0] < 3:
     PY3 = False
     def b(s):

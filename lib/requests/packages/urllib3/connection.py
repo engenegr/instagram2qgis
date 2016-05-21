@@ -1,11 +1,28 @@
 from __future__ import absolute_import
+
 import datetime
 import os
-import sys
-import socket
 from socket import error as SocketError, timeout as SocketTimeout
+import socket
+import sys
 import warnings
+
+from .exceptions import (
+    NewConnectionError,
+    ConnectTimeoutError,
+    SubjectAltNameWarning,
+    SystemTimeWarning,
+)
 from .packages import six
+from .packages.ssl_match_hostname import match_hostname
+from .util import connection
+from .util.ssl_ import (
+    resolve_cert_reqs,
+    resolve_ssl_version,
+    ssl_wrap_socket,
+    assert_fingerprint,
+)
+
 
 try:  # Python 3
     from http.client import HTTPConnection as _HTTPConnection
@@ -32,23 +49,9 @@ except NameError:  # Python 2:
         pass
 
 
-from .exceptions import (
-    NewConnectionError,
-    ConnectTimeoutError,
-    SubjectAltNameWarning,
-    SystemTimeWarning,
-)
-from .packages.ssl_match_hostname import match_hostname
-
-from .util.ssl_ import (
-    resolve_cert_reqs,
-    resolve_ssl_version,
-    ssl_wrap_socket,
-    assert_fingerprint,
-)
 
 
-from .util import connection
+
 
 port_by_scheme = {
     'http': 80,

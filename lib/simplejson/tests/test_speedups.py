@@ -1,8 +1,7 @@
-import sys
-import unittest
-from unittest import TestCase
-
 from simplejson import encoder, scanner
+import sys
+from unittest import TestCase
+import unittest
 
 
 def has_speedups():

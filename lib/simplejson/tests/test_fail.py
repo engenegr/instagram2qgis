@@ -3,6 +3,7 @@ from unittest import TestCase
 
 import simplejson as json
 
+
 # 2007-10-05
 JSONDOCS = [
     # http://json.org/JSON_checker/test/fail1.json

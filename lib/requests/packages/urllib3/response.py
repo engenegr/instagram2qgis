@@ -1,17 +1,18 @@
 from __future__ import absolute_import
+
 from contextlib import contextmanager
-import zlib
 import io
-from socket import timeout as SocketTimeout
 from socket import error as SocketError
+from socket import timeout as SocketTimeout
+import zlib
 
 from ._collections import HTTPHeaderDict
+from .connection import HTTPException, BaseSSLError
 from .exceptions import (
     ProtocolError, DecodeError, ReadTimeoutError, ResponseNotChunked
 )
 from .packages.six import string_types as basestring, binary_type, PY3
 from .packages.six.moves import http_client as httplib
-from .connection import HTTPException, BaseSSLError
 from .util.response import is_fp_closed, is_response_to_head
 
 

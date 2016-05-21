@@ -1,7 +1,8 @@
-from json_import import simplejson
-import urllib
-from httplib2 import Http
 import mimetypes
+import urllib
+
+from httplib2 import Http
+from json_import import simplejson
 
 
 class OAuth2AuthExchangeError(Exception):

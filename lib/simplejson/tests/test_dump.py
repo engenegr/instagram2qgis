@@ -1,6 +1,8 @@
-from unittest import TestCase
 from simplejson.compat import StringIO, long_type, b, binary_type, PY3
+from unittest import TestCase
+
 import simplejson as json
+
 
 def as_text_type(s):
     if PY3 and isinstance(s, binary_type):
