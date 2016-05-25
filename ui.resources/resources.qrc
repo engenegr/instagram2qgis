@@ -12,5 +12,6 @@
 		<file>../images/icon_users_follow.png</file>			
 		<file>../images/icon_popular.png</file>	 
 		<file>../images/click.png</file>	 
+		<file>../images/save_credentials.png</file>	 
     </qresource>
 </RCC>

@@ -14,7 +14,7 @@ name=Instagram2qgis
 qgisMinimumVersion=2.0
 description=Search and downloading Instagram images.
 about=Search and downloading Instagram images and create a point shapefile with them.You need install some additional Python libraries:instagram,httplib2,requests,simplejson,six 
-version=0.3
+version=0.4
 author=Francisco Raga
 email=franka1986@gmail.com
 
@@ -25,6 +25,11 @@ email=franka1986@gmail.com
 # Uncomment the following line and add your changelog entries:
 changelog=    
 	** General **
+	0.4:
+		- Save user credentials (token/client) possibility.
+		- Fixed error copy libraries "Linux Machine".
+		- Fixed need re-start Qgis,is not necessary.
+		- Minor changes.
 	0.3:
 		- Fixed error (global name InstagramAPI is not defined)
 		- Minor changes.

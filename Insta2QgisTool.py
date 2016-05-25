@@ -20,7 +20,7 @@
  ***************************************************************************/
 """
 import os.path, shutil
-
+import re
 from About import AboutDialog
 from Insta2QgisDialog import Insta2QgisDialog
 from PyQt4.QtCore import *
@@ -28,11 +28,12 @@ from PyQt4.QtGui import *
 import gui.generated.resources_rc
 from qgis.core import *
 from qgis.gui import *
+from qgis.utils import reloadPlugin
 try:  
     import sys
     from pydevd import *
 except:
-    None 
+    pass 
 
 class Insta2QgisTool:
 
@@ -45,6 +46,7 @@ class Insta2QgisTool:
         self.iface = iface
         self.plugin_dir = os.path.dirname(__file__)
         locale = QSettings().value("locale//userLocale")[0:2]
+        self.instaladas=False
         localePath = os.path.join(self.plugin_dir, 'i18n', 'Instagram2qgis_{}.qm'.format(locale))
         if os.path.exists(localePath):
             self.translator = QTranslator()
@@ -72,7 +74,6 @@ class Insta2QgisTool:
     def About(self):
         self.About = AboutDialog(self.iface)
         self.About.exec_()
-        return
     
     def run(self):
         #Check libraries
@@ -82,6 +83,10 @@ class Insta2QgisTool:
         self.Prerequisites("simplejson")
         self.Prerequisites("six") 
         
+        if self.instaladas==True:
+            reloadPlugin('instagram2qgis')
+            return
+            
         self.dlg = Insta2QgisDialog(self.iface)
         self.dlg.setWindowFlags(Qt.WindowSystemMenuHint | Qt.WindowTitleHint) 
         self.dlg.exec_()
@@ -104,18 +109,26 @@ class Insta2QgisTool:
             elif name=="six":
                 import six
         except:
-            plugin_dir = os.path.dirname(__file__).replace("\\", "/")+"/lib"          
-            prefixPath=QgsApplication.prefixPath().replace("\\", "/")+"/python"        
+            lib_dir = os.path.normpath(self.plugin_dir +QDir.separator()+"lib")
+            
+            if sys.platform.startswith('win'):    
+                prefixPath=os.path.normpath(QgsApplication.prefixPath()+QDir.separator()+"python")
+            else:
+                prefixPath=os.path.normpath(QgsApplication.prefixPath()+QDir.separator()+"share//qgis//python")   
+                 
+            lib_dir =re.sub("\\\\","//",lib_dir) 
+            prefixPath= re.sub("\\\\","//",prefixPath) 
+            
             ret = QMessageBox.question(None, self.tr("Missing library "+name+" !"), 
-                                    self.tr("The missing library can be found at: \n\n'"+plugin_dir+"'\n\n"+
+                                    self.tr("The missing library can be found at: \n\n'"+lib_dir+"'\n\n"+
                                     "You must copy them to:\n\n"+
                                      "'"+prefixPath+"'\n\n"
-                                     +"Do you want to copy the library "+name+" automatically?\n\n"+
-                                     "Remember restart Qgis when You install all necessary libraries for use it."),
+                                     +"Do you want to copy the library "+name+" automatically?\n\n"),
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
                                      
-            if ret == QMessageBox.Yes:                
-                self.copyDirectory(plugin_dir.replace("/", "\\")+"\\"+name, prefixPath.replace("/", "\\")+"\\"+name,name)
+            if ret == QMessageBox.Yes:                            
+                self.copyDirectory(lib_dir +"//" + name, prefixPath+"//"+name , name)
+                self.instaladas = True
                 return
             if ret == QMessageBox.No:
                 self.iface.messageBar().pushMessage("Warning: ", "Remember to copy the missing libraries manually" ,level=QgsMessageBar.INFO, duration=3) 
@@ -124,8 +137,8 @@ class Insta2QgisTool:
  
     #Copy libs
     def copyDirectory(self,src, dest,name):
-        src=src+"\\"
-        dest=dest+"\\"
+        src=src+"//"
+        dest=dest+"//"
         try:
             shutil.copytree(src, dest)
             self.iface.messageBar().pushMessage("Warning: ", "Libraries  "+name+" copied satisfactorily" ,level=QgsMessageBar.INFO, duration=3)

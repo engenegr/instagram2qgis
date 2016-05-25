@@ -31,26 +31,26 @@ try:
     import sys
     from pydevd import *
 except:
-    None   
+    pass   
 try:    
     from instagram.client import InstagramAPI  
 except Exception,e:
-    QMessageBox.information(None, 'Error',"Fail importing library. "+ str(e) ,QMessageBox.Ok)
+    QMessageBox.information(None, 'Instagram2Qgis',"Fail importing library: "+ str(e) ,QMessageBox.Ok)
     pass
 try: 
     import base64
 except Exception,e:
-    QMessageBox.information(None, 'Error',"Fail importing library. "+ str(e) ,QMessageBox.Ok)
+    QMessageBox.information(None, 'Instagram2Qgis',"Fail importing library: "+ str(e) ,QMessageBox.Ok)
     pass
 try: 
     import tempfile
 except Exception,e:
-    QMessageBox.information(None, 'Error',"Fail importing library. "+ str(e) ,QMessageBox.Ok)
+    QMessageBox.information(None, 'Instagram2Qgis',"Fail importing library: "+ str(e) ,QMessageBox.Ok)
     pass
 try: 
     import requests
 except Exception,e:
-    QMessageBox.information(None, 'Error',"Fail importing library. "+ str(e) ,QMessageBox.Ok)
+    QMessageBox.information(None, 'Instagram2Qgis',"Fail importing library: "+ str(e) ,QMessageBox.Ok)
     pass
      
 class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
@@ -73,11 +73,25 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         
         self.setMinimumSize(QSize(width, height))
         self.setMaximumSize(QSize(width, height))
-        
-        self.AddAboutButton()
+ 
         self.HideGroupBox()
         
         self.TypeSearch="hashtags" #Default search
+        
+        self.GetCredentials()
+          
+    #Save acces login  
+    def SaveCredentials(self):
+        self.settings.setValue("instagram2qgis/token",self.lnToken.text())
+        self.settings.setValue("instagram2qgis/client",self.lnAcces.text())
+        self.iface.messageBar().pushMessage("Info: ", "Save credentials correctly.",level=QgsMessageBar.INFO, duration=3)
+        return
+    
+    #Get values credentials
+    def GetCredentials(self):
+        self.lnToken.setText(self.settings.value("instagram2qgis/token"))
+        self.lnAcces.setText(self.settings.value("instagram2qgis/client"))
+        return  
  
     #Hide groupbox
     def HideGroupBox(self):
@@ -90,19 +104,8 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
     # About
     def about(self):
         self.About = AboutDialog(self.iface)
-        self.About.setWindowFlags(Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
+        #self.About.setWindowFlags(Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
         self.About.exec_()
-        return
-
-    #Add About button
-    def AddAboutButton(self):
-        layout = QVBoxLayout()
-        toolBar = QToolBar(self)
-        toolBar.addAction(u"About", self.about)         
-        toolBar.setStyleSheet("QToolBar {border-bottom: 0px solid grey }")
-        layout.addWidget(toolBar)
-        self.setLayout(layout)
-        return
  
     #Save Output file
     def SaveFile(self):
@@ -194,10 +197,6 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         client_secret = self.lnAcces.text()
         user_id=self.lnId.text()
  
-        #Put your values here for use.       
-#         access_token =""
-#         client_secret =""
- 
         if not access_token or not client_secret:
             QMessageBox.information(self, "Empty values", "Complete mandatory items <access_token> and <client_secret>", QMessageBox.AcceptRole)
             return  
@@ -208,7 +207,6 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
             if self.TypeSearch=="hashtags":
                 count=self.sp_count.value()  
                 tag=self.ln_tags.text()
-                #tag="Madrid"
                 if tag=="":
                     QMessageBox.information(self, "Empty values", "Tag value is empty", QMessageBox.AcceptRole)
                     self.aceptar.setCursor(QCursor(Qt.PointingHandCursor))
@@ -217,9 +215,6 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
             
                 tag_search, next_tag = api.tag_search(tag)
                 tag_recent_media, next = api.tag_recent_media(count,tag_name=tag_search[0].name)
-                
-                #return self.Checklength() if len(tag_recent_media)==0 else [self.AddFeatures(tag_media,layer,categorized) for tag_media in tag_recent_media]
-                 
                 if len(tag_recent_media)==0:return self.Checklength()
                 categorized,layer=self.CreateShape()
                 for tag_media in tag_recent_media: 
@@ -227,7 +222,6 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
                     
             #Search recent media with Location              
             elif self.TypeSearch=="coords":
-                #Search with Location
                 lat=self.ln_lat.text()
                 lng=self.ln_lng.text()
                 distance=self.sp_distance.value()                    
@@ -247,7 +241,6 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
                     return
                 
                 user_name=self.lnId.text()
-                #user_name="Instagram"
                 user_search = api.user_search(user_name)
 
                 if len(user_search)==0:return self.Checklength()
@@ -299,7 +292,6 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
                     return  
 
                 location_id=int(self.ln_loc_id.text())
-                #location_id=514276
                 recent_media, next = api.location_recent_media(location_id=location_id)
                 
                 if len(recent_media)==0:return self.Checklength()
@@ -433,7 +425,7 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
     
     #Add features to shape
     def AddFeatures(self,media,layer,categorized):
-         
+
         self.update_progressbar(40)
         fet = QgsFeature()
         try: id_photo = media.id
@@ -450,7 +442,7 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         except: user_profile_picture =""
         try: comments = str(media.comments).strip('[]')
         except: comments =""
-        try: comments_count = media.comments_count
+        try: comments_count = media.comment_count
         except: comments_count =""
         try: likes_count = media.like_count
         except: likes_count =""
@@ -522,12 +514,12 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         new_category = QgsRendererCategoryV2(str(media.id), symbol,str(media.id))
         categorized.append(new_category)
         renderer = QgsCategorizedSymbolRendererV2("id_photo", categorized)
+        
         layer.setRendererV2(renderer)
         
         layer.updateExtents()
         layer.triggerRepaint()
-       
-        
+ 
         try:#Save style Layer
             layer.saveNamedStyle(qmlpath + os.sep +'instagram_style.qml')
         except:

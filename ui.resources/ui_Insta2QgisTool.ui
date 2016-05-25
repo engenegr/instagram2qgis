@@ -24,7 +24,7 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>600</width>
+    <width>16777215</width>
     <height>16777215</height>
    </size>
   </property>
@@ -40,17 +40,40 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QPushButton" name="btn_About">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">text-align:left;</string>
+       </property>
+       <property name="text">
+        <string>About</string>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="Line" name="line">
@@ -60,7 +83,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QFormLayout" name="formLayout">
+    <layout class="QGridLayout" name="gridLayout_2">
      <property name="topMargin">
       <number>6</number>
      </property>
@@ -138,14 +161,14 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>Number photos</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="QSpinBox" name="sp_count">
        <property name="minimum">
         <number>1</number>
@@ -155,6 +178,32 @@
        </property>
        <property name="value">
         <number>10</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" rowspan="2">
+      <widget class="QPushButton" name="btn_s_login">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="toolTip">
+        <string>Save Credentials</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/imgInstagram/images/save_credentials.png</normaloff>:/imgInstagram/images/save_credentials.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -175,6 +224,23 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
+     <item row="4" column="1">
+      <widget class="QCheckBox" name="ch_popular">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>Search popular photos</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/imgInstagram/images/icon_popular.png</normaloff>:/imgInstagram/images/icon_popular.png</iconset>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="1">
       <widget class="QCheckBox" name="ch_user">
        <property name="cursor">
@@ -212,40 +278,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QCheckBox" name="ch_location_recent">
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="text">
-        <string>Location Recent Media by ID</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/imgInstagram/images/icon_places.png</normaloff>:/imgInstagram/images/icon_places.png</iconset>
-       </property>
-       <property name="autoExclusive">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QCheckBox" name="ch_user_media">
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="text">
-        <string>User Media Feed</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/imgInstagram/images/icon_users_feed.png</normaloff>:/imgInstagram/images/icon_users_feed.png</iconset>
-       </property>
-       <property name="autoExclusive">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="1">
       <widget class="QCheckBox" name="ch_user_recent">
        <property name="cursor">
@@ -257,6 +289,23 @@
        <property name="icon">
         <iconset resource="resources.qrc">
          <normaloff>:/imgInstagram/images/icon_users_recent.png</normaloff>:/imgInstagram/images/icon_users_recent.png</iconset>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QCheckBox" name="ch_location_recent">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>Location Recent Media by ID</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/imgInstagram/images/icon_places.png</normaloff>:/imgInstagram/images/icon_places.png</iconset>
        </property>
        <property name="autoExclusive">
         <bool>true</bool>
@@ -280,6 +329,23 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="ch_user_media">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>User Media Feed</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resources.qrc">
+         <normaloff>:/imgInstagram/images/icon_users_feed.png</normaloff>:/imgInstagram/images/icon_users_feed.png</iconset>
+       </property>
+       <property name="autoExclusive">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
      <item row="4" column="0">
       <widget class="QCheckBox" name="ch_location">
        <property name="cursor">
@@ -291,23 +357,6 @@
        <property name="icon">
         <iconset resource="resources.qrc">
          <normaloff>:/imgInstagram/images/icon_map.png</normaloff>:/imgInstagram/images/icon_map.png</iconset>
-       </property>
-       <property name="autoExclusive">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QCheckBox" name="ch_popular">
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="text">
-        <string>Search popular photos</string>
-       </property>
-       <property name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/imgInstagram/images/icon_popular.png</normaloff>:/imgInstagram/images/icon_popular.png</iconset>
        </property>
        <property name="autoExclusive">
         <bool>true</bool>
@@ -734,7 +783,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>589</x>
-     <y>562</y>
+     <y>697</y>
     </hint>
     <hint type="destinationlabel">
      <x>11</x>
@@ -750,7 +799,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>508</x>
-     <y>562</y>
+     <y>697</y>
     </hint>
     <hint type="destinationlabel">
      <x>222</x>
@@ -766,7 +815,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>588</x>
-     <y>459</y>
+     <y>656</y>
     </hint>
     <hint type="destinationlabel">
      <x>260</x>
@@ -782,7 +831,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>404</x>
-     <y>349</y>
+     <y>391</y>
     </hint>
     <hint type="destinationlabel">
      <x>53</x>
@@ -797,8 +846,8 @@
    <slot>TypeSearch(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>138</x>
-     <y>191</y>
+     <x>148</x>
+     <y>169</y>
     </hint>
     <hint type="destinationlabel">
      <x>584</x>
@@ -813,8 +862,8 @@
    <slot>TypeSearch(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>130</x>
-     <y>218</y>
+     <x>140</x>
+     <y>247</y>
     </hint>
     <hint type="destinationlabel">
      <x>22</x>
@@ -829,8 +878,8 @@
    <slot>TypeSearch(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>429</x>
-     <y>194</y>
+     <x>589</x>
+     <y>169</y>
     </hint>
     <hint type="destinationlabel">
      <x>516</x>
@@ -845,8 +894,8 @@
    <slot>TypeSearch(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>459</x>
-     <y>220</y>
+     <x>589</x>
+     <y>247</y>
     </hint>
     <hint type="destinationlabel">
      <x>481</x>
@@ -861,8 +910,8 @@
    <slot>TypeSearch(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>153</x>
-     <y>193</y>
+     <x>456</x>
+     <y>195</y>
     </hint>
     <hint type="destinationlabel">
      <x>299</x>
@@ -877,8 +926,8 @@
    <slot>TypeSearch(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>446</x>
-     <y>193</y>
+     <x>296</x>
+     <y>221</y>
     </hint>
     <hint type="destinationlabel">
      <x>299</x>
@@ -893,8 +942,8 @@
    <slot>TypeSearch(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>446</x>
-     <y>216</y>
+     <x>296</x>
+     <y>195</y>
     </hint>
     <hint type="destinationlabel">
      <x>299</x>
@@ -909,12 +958,44 @@
    <slot>TypeSearch(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>153</x>
-     <y>216</y>
+     <x>456</x>
+     <y>221</y>
     </hint>
     <hint type="destinationlabel">
      <x>299</x>
      <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_s_login</sender>
+   <signal>clicked()</signal>
+   <receiver>Insta2QgisToolDialog</receiver>
+   <slot>SaveCredentials()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>574</x>
+     <y>68</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>-3</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_About</sender>
+   <signal>clicked()</signal>
+   <receiver>Insta2QgisToolDialog</receiver>
+   <slot>about()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>52</x>
+     <y>17</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>4</x>
+     <y>16</y>
     </hint>
    </hints>
   </connection>
@@ -929,5 +1010,7 @@
   <slot>slot1()</slot>
   <slot>captureCoord()</slot>
   <slot>TypeSearch(bool)</slot>
+  <slot>SaveCredentials()</slot>
+  <slot>about()</slot>
  </slots>
 </ui>

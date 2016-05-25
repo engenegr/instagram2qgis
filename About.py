@@ -31,7 +31,7 @@ try:
     import sys
     from pydevd import *
 except:
-    None
+    pass
 
  
 class AboutDialog(QDialog, Ui_About):
@@ -51,7 +51,6 @@ class AboutDialog(QDialog, Ui_About):
             elif sys.platform.startswith('lin'):
                 subprocess.call(['xdg-open', self.video])
             elif sys.platform.startswith('win'):
-                #subprocess.call([self.video])
                 os.startfile(self.video)
             else:   
                 pass
