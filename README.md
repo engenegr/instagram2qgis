@@ -1,3 +1,9 @@
+- - -
+
+**_This project is not actively maintained._**
+
+- - - 
+
 # Instagram to Qgis
 
 This plugin allows to import data from instagram and visualize it in Qgis.
