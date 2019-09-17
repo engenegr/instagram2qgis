@@ -3,11 +3,11 @@
 # Form implementation generated from reading ui file 'ui.resources\ui_Insta2QgisTool.ui'
 #
 # Created: Wed May 25 09:49:05 2016
-#      by: PyQt4 UI code generator 4.11.3
+#      by: PyQt5 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -398,4 +398,4 @@ class Ui_Insta2QgisToolDialog(object):
         self.aceptar.setText(_translate("Insta2QgisToolDialog", "Accept", None))
         self.cancelar.setText(_translate("Insta2QgisToolDialog", "Cancel", None))
 
-import resources_rc
+#import resources_rc

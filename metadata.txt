@@ -11,12 +11,13 @@
 
 [general]
 name=Instagram2qgis
-qgisMinimumVersion=2.0
+qgisMinimumVersion=2.99
+qgisMaximumVersion=3.99
 description=Search and downloading Instagram images.
 about=Search and downloading Instagram images and create a point shapefile with them.You need install some additional Python libraries:instagram,httplib2,requests,simplejson,six 
-version=0.4
-author=Francisco Raga
-email=franka1986@gmail.com
+version=0.5
+author=Francisco Raga, Evdokimov Ilya
+email=franka1986@gmail.com, evdokimov.ilya(_)gmail.com
 
 # end of mandatory metadata
 
@@ -25,6 +26,8 @@ email=franka1986@gmail.com
 # Uncomment the following line and add your changelog entries:
 changelog=    
 	** General **
+	0.5:
+		- Raised version for QGis 3.
 	0.4:
 		- Save user credentials (token/client) possibility.
 		- Fixed error copy libraries "Linux Machine".

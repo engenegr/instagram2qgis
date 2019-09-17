@@ -3,11 +3,11 @@
 # Form implementation generated from reading ui file 'ui.resources\About.ui'
 #
 # Created: Wed May 25 09:49:05 2016
-#      by: PyQt4 UI code generator 4.11.3
+#      by: PyQt5 UI code generator 4.11.3
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -99,4 +99,4 @@ class Ui_About(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:8pt;\">[© All4gis 2016]</span></p></body></html>", None))
         self.pushButton.setText(_translate("About", "Show video example", None))
 
-import resources_rc
+#import resources_rc

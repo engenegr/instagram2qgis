@@ -22,10 +22,11 @@
 import os.path
 from qgis.core import *
 from qgis.gui import *
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from About import AboutDialog
-from gui.generated.ui_Insta2QgisTool import Ui_Insta2QgisToolDialog
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from .About import AboutDialog
+from .gui.generated.ui_Insta2QgisTool import Ui_Insta2QgisToolDialog
  
 try:  
     import sys
@@ -34,22 +35,22 @@ except:
     pass   
 try:    
     from instagram.client import InstagramAPI  
-except Exception,e:
+except Exception as e:
     QMessageBox.information(None, 'Instagram2Qgis',"Fail importing library: "+ str(e) ,QMessageBox.Ok)
     pass
 try: 
     import base64
-except Exception,e:
+except Exception as e:
     QMessageBox.information(None, 'Instagram2Qgis',"Fail importing library: "+ str(e) ,QMessageBox.Ok)
     pass
 try: 
     import tempfile
-except Exception,e:
+except Exception as e:
     QMessageBox.information(None, 'Instagram2Qgis',"Fail importing library: "+ str(e) ,QMessageBox.Ok)
     pass
 try: 
     import requests
-except Exception,e:
+except Exception as e:
     QMessageBox.information(None, 'Instagram2Qgis',"Fail importing library: "+ str(e) ,QMessageBox.Ok)
     pass
      
@@ -317,7 +318,7 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
  
             self.reject()
             
-        except Exception, e:
+        except Exception as e:
             self.iface.messageBar().pushMessage("Error: ", "fail to load photos: "+str(e),level=QgsMessageBar.CRITICAL, duration=20)             
             self.aceptar.setCursor(QCursor(Qt.PointingHandCursor))
              

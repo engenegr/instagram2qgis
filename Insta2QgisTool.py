@@ -21,11 +21,12 @@
 """
 import os.path, shutil
 import re
-from About import AboutDialog
-from Insta2QgisDialog import Insta2QgisDialog
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-import gui.generated.resources_rc
+from .About import AboutDialog
+from .Insta2QgisDialog import Insta2QgisDialog
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+#import .gui.generated.resources_rc
 from qgis.core import *
 from qgis.gui import *
 from qgis.utils import reloadPlugin
