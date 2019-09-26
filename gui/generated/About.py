@@ -7,7 +7,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -32,15 +32,15 @@ class Ui_About(object):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/imgInstagram/images/info.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         About.setWindowIcon(icon)
-        self.verticalLayout = QtGui.QVBoxLayout(About)
+        self.verticalLayout = QtWidgets.QVBoxLayout(About)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.textEdit = QtGui.QTextEdit(About)
+        self.textEdit = QtWidgets.QTextEdit(About)
         self.textEdit.setEnabled(True)
         self.textEdit.setReadOnly(True)
         self.textEdit.setTextInteractionFlags(QtCore.Qt.TextBrowserInteraction)
         self.textEdit.setObjectName(_fromUtf8("textEdit"))
         self.verticalLayout.addWidget(self.textEdit)
-        self.pushButton = QtGui.QPushButton(About)
+        self.pushButton = QtWidgets.QPushButton(About)
         self.pushButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButton.setObjectName(_fromUtf8("pushButton"))
         self.verticalLayout.addWidget(self.pushButton)

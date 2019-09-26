@@ -68,7 +68,7 @@ class Insta2QgisDialog(QDialog, Ui_Insta2QgisToolDialog):
         self.canvas=self.iface.mapCanvas()
         self.settings = QSettings()
         self.settings.setValue("instagram2qgis/outpath", "")
- 
+
         width=600
         height=450
         
